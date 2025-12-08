@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXODESIGN | Presencia Digital</title>
+    <link rel="manifest" href="manifiesto.webmanifest">
+    <meta name="theme-color" content="#3CB371">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        /* Paleta de Colores Basada en la Imagen */
+        :root {
+            --bg-light: #f4f6f9; /* Fondo muy claro, casi blanco */
+            --bg-header: #121212; /* Encabezado negro */
+            --bg-card: #283747; /* Azul oscuro/negro para las tarjetas */
+            --accent-green: #06d6a0; /* Cian/Verde brillante para títulos y éxito */
+            --accent-purple: #6c5ce7; /* Morado/Azul para botones y iconos */
+            --text-dark: #333;
+            --text-light: #f8f8f8;
+        }
+
+        body {
+            background: var(--bg-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-dark);
+        }
+
+        /* 1. Estilo de Encabezado (Header con Fondo Oscuro) */
+        .header-container {
+            background-color: var(--bg-header);
+            padding: 20px 0 100px 0;
+            clip-path: polygon(0 0, 100% 0, 100% 80%, 0% 100%);
+            color: var(--text-light);
+            position: relative;
+        }
+        
+        /* 2. Navegación */
+        .custom-navbar {
+            background-color: transparent !important;
+        }
+        .navbar-brand {
+            color: var(--accent-green) !important;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        /* Botones de Navegación */
+        .btn-tienda { 
+            background-color: var(--accent-green) !important;
+            color: var(--bg-header) !important;
+            border-radius: 50px;
+            font-weight: 600;
+            padding: 5px 15px;
+        }
+        .btn-admin { 
+            background-color: transparent !important;
+            color: var(--text-light) !important;
+            border: 1px solid var(--accent-purple);
+            border-radius: 50px;
+            font-weight: 600;
+            padding: 5px 15px;
+            transition: background-color 0.3s;
+        }
+        .btn-admin:hover {
+            background-color: rgba(108, 92, 231, 0.2); 
+        }
+
+        /* 3. Sección Hero y Títulos */
+        .hero-title {
+            color: var(--accent-green);
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-top: 30px;
+        }
+        .hero-subtitle {
+            color: var(--text-light);
+            font-size: 1.4rem;
+            font-weight: 300;
+            margin-bottom: 30px; 
+        }
+        
+        /* Botón de Asesoría */
+        .btn-asesoria {
+            background-color: var(--accent-purple);
+            border-color: var(--accent-purple);
+            color: var(--text-light);
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .btn-asesoria:hover {
+            background-color: #5b4dd4;
+            border-color: #5b4dd4;
+            transform: translateY(-2px);
+        }
+
+        /* 4. Tarjetas de Servicios */
+        .service-card {
+            background-color: var(--bg-card);
+            color: var(--text-light);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            min-height: 250px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .service-card h4 {
+            color: var(--accent-green);
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        /* Iconos de Acción (Círculos) */
+        .action-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 50px;
+            height: 50px;
+            background-color: var(--accent-green);
+            border-radius: 50%;
+            color: var(--bg-header);
+            font-size: 1.5rem;
+            margin: 0 auto 10px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .services-grid {
+            margin-top: -80px;
+            position: relative;
+            z-index: 5;
+        }
+        
+        /* Estilos del Modal */
+        #adminLoginModal .modal-content {
+            background-color: var(--bg-header); /* Fondo oscuro del modal */
+            color: var(--text-light);
+            border: 2px solid var(--accent-purple);
+        }
+        #adminLoginModal .modal-title {
+            color: var(--accent-green);
+        }
+        #adminLoginModal .form-control {
+            background-color: #333;
+            color: var(--text-light);
+            border-color: var(--accent-purple);
+        }
+        #adminLoginModal .btn-primary {
+            background-color: var(--accent-purple);
+            border-color: var(--accent-purple);
+            transition: background-color 0.3s;
+        }
+        #adminLoginModal .btn-primary:hover {
+            background-color: #5b4dd4;
+            border-color: #5b4dd4;
+        }
+        .btn-close-white {
+            filter: invert(1);
+        }
+
+
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 10px 0 50px 0;
+                clip-path: none;
+            }
+            .hero-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <nav class="navbar custom-navbar">
+            <div class="container d-flex justify-content-between align-items-center">
+                <span class="navbar-brand">
+                    <i style="font-style: normal; font-size: 2rem;">N</i> NEXODESIGN
+                </span>
+                <div class="d-flex gap-2">
+                    <a href="tienda.html" class="btn btn-tienda">
+                        <i class="bi bi-briefcase-fill"></i> Tienda
+                    </a>
+                    <button id="adminButton" class="btn btn-admin" type="button" data-bs-toggle="modal" data-bs-target="#adminLoginModal">
+                        <i class="bi bi-person-gear"></i> Admin
+                    </button>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="container pt-5">
+            <div class="row align-items-center">
+                <div class="col-lg-12 text-center text-lg-start">
+                    <h1 class="hero-title">Creamos tu Presencia Digital</h1>
+                    <p class="hero-subtitle">
+                        Especialistas en transformar marcas con elementos multimedia.
+                    </p>
+                    <a href="contacto.html" class="btn btn-asesoria mb-5">
+                        <i class="bi bi-chat-dots-fill"></i> Quiero una Asesoría
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container services-grid">
+        <h2 class="mb-4" style="font-weight: 700;">Nuestros Servicios</h2>
+        
+        <div class="row">
+            <div class="col-md-4">
+                <div class="service-card">
+                    <h4 class="mb-2">Foto y Video Digital</h4>
+                    <p>Estrategias personalizadas para el contenido en línea.</p>
+                    <div class="action-icon">
+                        <i class="bi bi-camera-reels"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="service-card">
+                    <h4 class="mb-2">Producción Audiovisual</h4>
+                    <p>Estrategias de personajes para el contenido en línea.</p>
+                    <div class="action-icon">
+                        <i class="bi bi-mic"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="service-card">
+                    <h4 class="mb-2">Producción Audiovisual</h4>
+                    <p>Estrategias, video y guiones para el podcast.</p>
+                    <div class="action-icon">
+                        <i class="bi bi-camera-video"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="service-card">
+                    <h4 class="mb-2">Marketing Digital</h4>
+                    <p>SEO, SEM, Redes Sociales, comerciales y videos.</p>
+                    <div class="action-icon">
+                        <i class="bi bi-bullhorn"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="service-card">
+                    <h4 class="mb-2">Diseño y Branding</h4>
+                    <p>Diseño de identidad visual para comerciales y usos corporativos.</p>
+                    <div class="action-icon">
+                        <i class="bi bi-palette"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="service-card">
+                    <h4 class="mb-2">Diseño y Branding Ideending</h4>
+                    <p>Logos de diseño visual para el desarrollo de la marca.</p>
+                    <div class="action-icon">
+                        <i class="bi bi-lightbulb"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+
+    <div class="modal fade" id="adminLoginModal" tabindex="-1" aria-labelledby="adminLoginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="adminLoginModalLabel">
+                        <i class="bi bi-lock-fill me-2"></i> Acceso de Administrador
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="adminLoginForm">
+                    <div class="modal-body">
+                        <div id="loginAlert" class="alert alert-danger d-none" role="alert">
+                            ❌ Usuario o contraseña incorrectos. Intente de nuevo.
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="adminUsername" class="form-label">Usuario:</label>
+                            <input type="text" class="form-control" id="adminUsername" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="adminPassword" class="form-label">Contraseña:</label>
+                            <input type="password" class="form-control" id="adminPassword" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-box-arrow-in-right"></i> Entrar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Lógica de registro del Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('Service Worker registrado', reg))
+                .catch(err => console.log('Error al registrar SW:', err));
+        }
+
+        // -----------------------------------------------------------------
+        // LÓGICA DE AUTENTICACIÓN MEJORADA (Redirección directa si es correcto)
+        // -----------------------------------------------------------------
+        document.addEventListener('DOMContentLoaded', () => {
+            const adminLoginForm = document.getElementById('adminLoginForm');
+            const usernameInput = document.getElementById('adminUsername');
+            const passwordInput = document.getElementById('adminPassword');
+            const loginAlert = document.getElementById('loginAlert');
+            // Inicializa el objeto Modal de Bootstrap
+            const adminModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('adminLoginModal'));
+
+            // Credenciales Requeridas
+            const CORRECT_USER = 'NEXODESIGN';
+            const CORRECT_PASS = 'EVNDTI';
+
+            adminLoginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const username = usernameInput.value.trim();
+                const password = passwordInput.value.trim();
+
+                // Ocultar cualquier alerta anterior
+                loginAlert.classList.add('d-none');
+
+                if (username === CORRECT_USER && password === CORRECT_PASS) {
+                    // Credenciales correctas: Redirige automáticamente sin mostrar un mensaje de éxito
+                    
+                    // Opcional: Cierra el modal, aunque la redirección lo cerrará
+                    adminModal.hide(); 
+                    
+                    // Redirige a la página de administrador
+                    window.location.href = 'administrador.html';
+                } else {
+                    // Credenciales incorrectas: Muestra el mensaje de error dentro del modal
+                    loginAlert.classList.remove('d-none');
+                }
+            });
+            
+            // Limpiar los campos y el mensaje de error cada vez que se abre el modal
+            document.getElementById('adminLoginModal').addEventListener('show.bs.modal', () => {
+                adminLoginForm.reset();
+                loginAlert.classList.add('d-none');
+            });
+        });
+    </script>
+</body>
+</html>
