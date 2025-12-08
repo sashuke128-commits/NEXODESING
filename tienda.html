@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXODESIGN | Servicios Digitales</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#01c38e">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        /* Paleta de Colores Solicitada */
+        :root {
+            --bg-dark: #1a1e29;      /* Fondo Principal */
+            --card-bg: #132d46;      /* Fondo de Tarjetas/Elementos Secundarios */
+            --accent-teal: #01c38e; /* Acento Principal Brillante */
+            --text-light: #ffffff;  /* Color de Texto CLARO */
+            --text-secondary-readable: #a3b1c6; /* Gris claro para subtítulos/descripciones */
+        }
+
+        body { 
+            background: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            background-color: var(--card-bg) !important;
+            border-bottom: 2px solid var(--accent-teal);
+        }
+        .navbar-brand {
+            color: var(--accent-teal) !important;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        /* Estilo profesional de las tarjetas de servicio */
+        .card {
+            background-color: var(--card-bg) !important;
+            border: 2px solid #2e4a6a;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-teal);
+        }
+
+        .product-img {
+            height: 250px;
+            object-fit: cover;
+            width: 100%;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Botones y acentos */
+        .btn-custom-quote, .btn-submit-quote {
+            background-color: var(--accent-teal);
+            color: var(--bg-dark);
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .btn-custom-quote:hover, .btn-submit-quote:hover {
+            background-color: #00a87a;
+            color: var(--bg-dark);
+        }
+
+        .btn-add-cart {
+            background-color: #132d46;
+            border-color: var(--accent-teal);
+            color: var(--text-light) !important;
+        }
+        .btn-add-cart:hover {
+            background-color: #2e4a6a;
+            border-color: var(--accent-teal);
+        }
+        
+        .form-check-input:checked {
+            background-color: var(--accent-teal);
+            border-color: var(--accent-teal);
+        }
+        
+        /* Colores de Botones en Carrito y Modal */
+        #limpiar-carrito {
+            background: #cc0000 !important;
+            color: white !important;
+            border-color: #cc0000;
+        }
+        #pagar {
+            background: var(--accent-teal) !important;
+            color: var(--bg-dark) !important;
+            border-color: var(--accent-teal);
+        }
+
+        /* Estilos del Modal */
+        .modal-content {
+            background: var(--card-bg);
+            color: var(--text-light);
+            border: 2px solid var(--accent-teal);
+        }
+        .modal-title {
+            color: var(--accent-teal);
+        }
+        .form-label {
+            color: var(--accent-teal);
+        }
+        .form-control, .form-control:focus {
+            background-color: #0f2238;
+            color: var(--text-light);
+            border: 1px solid #2e4a6a;
+        }
+        .btn-close-white {
+            filter: invert(1);
+        }
+
+        /* AJUSTE DE LEGIBILIDAD */
+        .text-lead-readable {
+            color: var(--text-secondary-readable) !important;
+        }
+        .text-product-desc {
+             color: var(--text-secondary-readable) !important;
+        }
+        #emptyStoreMessage p {
+            color: var(--text-secondary-readable) !important;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark sticky-top">
+        <div class="container">
+            <div class="d-flex align-items-center">
+                <a href="index.html" class="btn btn-outline-secondary btn-sm me-2 text-white">
+                    <i class="bi bi-arrow-left"></i> Volver
+                </a>
+                <span class="navbar-brand mb-0 h1">NEXODESIGN</span>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-custom-quote" data-bs-toggle="modal" data-bs-target="#cotizarModal">
+                    <i class="bi bi-rocket-takeoff"></i> Personalizar Paquete
+                </button>
+                <a href="cotizaciones.html" class="btn btn-outline-light">
+                    <i class="bi bi-clipboard-check"></i> Mis Cotizaciones
+                </a>
+                                <button class="btn position-relative btn-add-cart text-white"
+                        data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">
+                    <i class="bi bi-cart3"></i> Carrito
+                    <span id="cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="text-center mb-5">
+            <h1 class="display-5" style="color: var(--accent-teal);">Nuestros Servicios Digitales</h1>
+            <p class="lead text-lead-readable">Explora nuestros productos listos o personaliza tu proyecto.</p>
+        </div>
+        
+        <div id="emptyStoreMessage" class="text-center py-5">
+             <i class="bi bi-box-seam-fill display-1" style="color: var(--accent-teal);"></i>
+             <h4 class="mt-3">Aún no hay servicios disponibles.</h4>
+             <p class="text-lead-readable">Los productos aparecerán aquí al ser agregados por el administrador.</p>
+        </div>
+
+        <div id="productos" class="row d-none">
+            </div>
+    </div>
+
+    <div class="modal fade" id="cotizarModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Personaliza tu Proyecto y Cotiza</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="cotizarForm">
+                    <div class="modal-body">
+                        <div class="row g-4">
+                            <div class="col-lg-5 border-end">
+                                <h6 class="text-white mb-3"><i class="bi bi-person-fill"></i> Información del Cliente</h6>
+                                <div class="mb-3">
+                                    <label for="cotizarName" class="form-label">Nombre Completo *</label>
+                                    <input type="text" class="form-control" id="cotizarName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="cotizarEmail" class="form-label">Correo Electrónico *</label>
+                                    <input type="email" class="form-control" id="cotizarEmail" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="cotizarPhone" class="form-label">Teléfono (WhatsApp)</label>
+                                    <input type="tel" class="form-control" id="cotizarPhone">
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-7">
+                                <h6 class="text-white mb-3"><i class="bi bi-list-check"></i> Servicios a Incluir (Paquete)</h6>
+                                <div class="row mb-4">
+                                    <div class="col-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Desarrollo Web (Landing Page)" id="servWeb">
+                                            <label class="form-check-label" for="servWeb">Desarrollo Web (Landing Page)</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="E-Commerce (Tienda Online)" id="servEcommerce">
+                                            <label class="form-check-label" for="servEcommerce">E-Commerce (Tienda Online)</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Aplicación Móvil/PWA" id="servApp">
+                                            <label class="form-check-label" for="servApp">Aplicación Móvil/PWA</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Marketing Digital (Ads)" id="servMarketing">
+                                            <label class="form-check-label" for="servMarketing">Marketing Digital (Ads)</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Optimización SEO y Contenido" id="servSeo">
+                                            <label class="form-check-label" for="servSeo">Optimización SEO y Contenido</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Diseño Gráfico (Branding)" id="servDesign">
+                                            <label class="form-check-label" for="servDesign">Diseño Gráfico (Branding)</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h6 class="text-white mb-3"><i class="bi bi-chat-left-text-fill"></i> Descripción del Proyecto</h6>
+                                <div class="mb-3">
+                                    <textarea class="form-control" id="cotizarProjectDesc" rows="5" placeholder="Cuéntanos lo que quieres lograr, presupuesto aproximado y cualquier detalle importante sobre tu proyecto." required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="submit" class="btn btn-submit-quote btn-lg w-75">
+                            <i class="bi bi-lightning-fill"></i> ¡Cotizar!
+                        </button>
+                        
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" style="background:var(--card-bg); color:white; border-left: 2px solid var(--accent-teal);">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" style="color:var(--accent-teal);">Carrito de Compras</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div id="carrito-contenido">
+                <ul id="lista-carrito" class="list-group mb-3"></ul>
+                <div class="border-top pt-3">
+                    <p class="h5"><strong>Total:</strong> $<span id="total">0</span></p>
+                    <div class="d-grid gap-2">
+                        <button id="limpiar-carrito" class="btn btn-outline-danger">
+                            <i class="bi bi-trash"></i> Vaciar Carrito
+                        </button>
+                        <button id="pagar" class="btn btn-success">
+                            <i class="bi bi-credit-card"></i> Pagar Ahora
+                        </button>
+                        <a href="index.html" class="btn btn-outline-primary text-white">
+                            <i class="bi bi-house"></i> Volver al Inicio
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="imageModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="background:var(--card-bg); border: 2px solid var(--accent-teal);">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="color:var(--accent-teal);">Vista de imágenes</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="carouselProducto" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner" id="carousel-images"></div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselProducto" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselProducto" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script type="module">
+        // --- CONFIGURACIÓN Y FUNCIONES DE FIREBASE ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyDlyA18XufNSSnF0pv5pc1lQIRNXkLAJAY",
+            authDomain: "stratify-5cbc4.firebaseapp.com",
+            projectId: "stratify-5cbc4",
+            storageBucket: "stratify-5cbc4.firebasestorage.app",
+            messagingSenderId: "843493852132",
+            appId: "1:843493852132:web:e08e49ba0963e0ae73bdf1",
+            measurementId: "G-NSHKMCZ95V"
+        };
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { 
+            getFirestore, collection, onSnapshot, query, orderBy, enableIndexedDbPersistence, addDoc
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        enableIndexedDbPersistence(db)
+          .then(() => { console.log("Persistencia offline habilitada - Tienda"); })
+          .catch((err) => { console.log("Persistencia no disponible en este contexto"); });
+
+        // --- ELEMENTOS Y VARIABLES GENERALES ---
+        const productosDiv = document.getElementById("productos");
+        const emptyStoreMessage = document.getElementById("emptyStoreMessage");
+        
+        // --- ELEMENTOS Y VARIABLES DEL CARRITO ---
+        let carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
+        const listaCarrito = document.getElementById('lista-carrito');
+        const totalElement = document.getElementById('total');
+        const cartBadge = document.getElementById('cart-badge');
+        
+        // ----------------------------------------------------
+        // LÓGICA DEL CARRITO DE COMPRAS
+        // ----------------------------------------------------
+        function mostrarCarrito() {
+            listaCarrito.innerHTML = '';
+            let total = 0;
+            
+            if (carrito.length === 0) {
+                listaCarrito.innerHTML = '<li class="list-group-item bg-dark text-center text-secondary">El carrito está vacío.</li>';
+                totalElement.textContent = '0.00';
+                cartBadge.classList.add('d-none');
+                cartBadge.textContent = '0';
+                return;
+            }
+
+            carrito.forEach(item => {
+                const subtotal = item.precio * item.cantidad;
+                total += subtotal;
+
+                const li = document.createElement('li');
+                li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'mb-2', 'rounded', 'border', 'text-light');
+                li.style.backgroundColor = 'var(--card-bg)';
+                li.innerHTML = `
+                    <div class="d-flex align-items-center">
+                        <img src="${item.imagenUrl || 'https://via.placeholder.com/50'}" class="cart-item-img me-3" style="width: 50px; height: 50px; object-fit: cover; border-radius: 0.25rem;">
+                        <div>
+                            <h6 class="mb-0 text-white">${item.nombre}</h6>
+                            <small class="text-secondary">$${item.precio.toFixed(2)} x ${item.cantidad}</small>
+                        </div>
+                    </div>
+                    <div>
+                        <strong>$${subtotal.toFixed(2)}</strong>
+                        <button class="btn btn-sm btn-danger ms-2" onclick="eliminarDelCarrito('${item.id}')">
+                            <i class="bi bi-x"></i>
+                        </button>
+                    </div>
+                `;
+                listaCarrito.appendChild(li);
+            });
+
+            totalElement.textContent = total.toFixed(2);
+            cartBadge.textContent = carrito.length;
+            cartBadge.classList.remove('d-none');
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+        }
+
+        window.agregarAlCarrito = function(id) {
+            const productos = JSON.parse(localStorage.getItem('productosCache') || '[]');
+            const producto = productos.find(p => p.id === id);
+            const cantidadInput = document.getElementById(`cantidad-${id}`);
+            const cantidad = parseInt(cantidadInput.value, 10) || 1;
+
+            if (!producto) {
+                console.error('Producto no encontrado:', id);
+                return;
+            }
+
+            const itemExistente = carrito.find(item => item.id === id);
+
+            if (itemExistente) {
+                itemExistente.cantidad += cantidad;
+            } else {
+                carrito.push({
+                    id: producto.id,
+                    nombre: producto.nombre,
+                    precio: producto.precio,
+                    imagenUrl: producto.imagenUrl,
+                    cantidad: cantidad
+                });
+            }
+            
+            alert(`"${producto.nombre}" añadido al carrito (x${cantidad})`);
+            cantidadInput.value = 1; 
+
+            mostrarCarrito();
+        }
+
+        window.eliminarDelCarrito = function(id) {
+            carrito = carrito.filter(item => item.id !== id);
+            mostrarCarrito();
+        }
+
+        function limpiarCarrito() {
+            if (confirm('¿Estás seguro que deseas vaciar el carrito?')) {
+                carrito = [];
+                localStorage.removeItem('carrito');
+                mostrarCarrito();
+            }
+        }
+
+        function pagar() {
+            if (carrito.length === 0) {
+                alert('El carrito está vacío. Agrega productos antes de pagar.');
+                return;
+            }
+            alert(`Procediendo al pago de $${totalElement.textContent}. Gracias por su compra.`);
+            limpiarCarrito();
+        }
+
+        // Asignar eventos a los botones
+        document.getElementById('limpiar-carrito').addEventListener('click', limpiarCarrito);
+        document.getElementById('pagar').addEventListener('click', pagar);
+        
+        // Función de Renderizado de Productos
+        function renderProductos(productos) {
+            productosDiv.innerHTML = '';
+            
+            if (productos.length === 0) {
+                emptyStoreMessage.classList.remove('d-none');
+                productosDiv.classList.add('d-none');
+                return;
+            }
+            
+            emptyStoreMessage.classList.add('d-none');
+            productosDiv.classList.remove('d-none');
+
+            productos.forEach(producto => {
+                const div = document.createElement("div");
+                div.classList.add("col-md-4", "mb-4");
+                
+                // Nota: La funcionalidad 'verImagen' y su modal de carrusel están en el código HTML,
+                // pero por brevedad y para el objetivo principal de la tienda, se mantiene simple.
+                const imagenesHTML = producto.imagenes && producto.imagenes.length > 1 
+                    ? `<div class="thumb-grid">
+                          ${producto.imagenes.slice(0, 4).map(url => 
+                        `<img src="${url}" class="thumb" style="cursor:pointer"
+                             onclick="alert('Funcionalidad de vista de imagen no implementada')" 
+                                alt="${producto.nombre}">`
+                        ).join('')}
+                    </div>` : '';
+                
+                div.innerHTML = `
+                    <div class="card h-100 shadow-sm">
+                        <img src="${producto.imagenUrl}" 
+                            class="product-img card-img-top"
+                            style="cursor:pointer"
+                            onclick="alert('Funcionalidad de vista de imagen no implementada')"
+                            alt="${producto.nombre}"
+                            onerror="this.src='https://via.placeholder.com/300x200?text=Imagen+No+Disponible'">
+                        ${imagenesHTML}
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title" style="color: var(--accent-teal);">${producto.nombre}</h5>
+                            <p class="card-text flex-grow-1 text-product-desc">${producto.descripcion}</p>
+                            <p class="card-text">
+                                <strong style="color: var(--accent-teal);" class="h5">$${producto.precio.toFixed(2)}</strong>
+                            </p>
+                            <p class="card-text">
+                                <small class="text-product-desc">
+                                    <i class="bi bi-person-circle"></i> ${producto.responsable} 
+                                </small>
+                            </p>
+                            <div class="mt-auto">
+                                <input type="number" 
+                                       min="1" 
+                                       value="1" 
+                                       id="cantidad-${producto.id}" 
+                                       class="form-control mb-2"
+                                       placeholder="Cantidad">
+                                <button class="btn btn-add-cart w-100" 
+                                        onclick="agregarAlCarrito('${producto.id}')">
+                                    <i class="bi bi-cart-plus"></i> Añadir al Carrito
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                productosDiv.appendChild(div);
+            });
+        }
+
+        // Lógica de carga de productos con escucha en tiempo real
+        function cargarProductos() {
+            const productosRef = collection(db, 'productos');
+            const q = query(productosRef, orderBy('createdAt', 'desc'));
+
+            onSnapshot(q, (snapshot) => {
+                const productosData = snapshot.docs.map(doc => {
+                    const data = doc.data();
+                    return {
+                        id: doc.id,
+                        nombre: data.nombre || 'Sin nombre',
+                        precio: Number(data.precio) || 0,
+                        descripcion: data.descripcion || 'Sin descripción',
+                        imagenes: data.imagenes || [],
+                        imagenUrl: data.imagenUrl || data.imagenes?.[0] || 'https://via.placeholder.com/300x200?text=Imagen+No+Disponible',
+                        responsable: data.responsable || 'Sin responsable'
+                    };
+                });
+                
+                if (productosData.length > 0) {
+                     localStorage.setItem('productosCache', JSON.stringify(productosData));
+                } else {
+                     localStorage.removeItem('productosCache');
+                }
+                
+                renderProductos(productosData);
+
+            }, (error) => {
+                console.error("Error al cargar productos de Firebase:", error);
+                const cachedProducts = JSON.parse(localStorage.getItem('productosCache') || '[]');
+                renderProductos(cachedProducts);
+            });
+        }
+        
+        cargarProductos();
+        mostrarCarrito();
+        
+        // ----------------------------------------------------------------------
+        // Lógica del Formulario de Cotización: GUARDA EN FIRESTORE (Punto 2)
+        // ----------------------------------------------------------------------
+        const cotizarForm = document.getElementById('cotizarForm');
+        const cotizacionesRef = collection(db, 'cotizaciones'); 
+
+        cotizarForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Obtener servicios seleccionados
+            const serviciosSeleccionados = Array.from(cotizarForm.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+
+            const nuevaCotizacion = {
+                nombre: document.getElementById('cotizarName').value,
+                email: document.getElementById('cotizarEmail').value,
+                telefono: document.getElementById('cotizarPhone').value,
+                servicios: serviciosSeleccionados.join(', '),
+                descripcion: document.getElementById('cotizarProjectDesc').value,
+                // Estatus inicial
+                estatus: 'Nuevo (Pendiente de Revisión)',
+                createdAt: new Date(),
+            };
+            
+            try {
+                // Guardar en Firestore
+                await addDoc(cotizacionesRef, nuevaCotizacion);
+                
+                alert("¡Cotización enviada con éxito! El administrador la revisará y pronto verás el estatus en tu panel de cotizaciones.");
+                // Cerrar Modal
+                document.getElementById("cotizarModal").querySelector(".btn-close-white").click();
+                cotizarForm.reset();
+                
+            } catch (error) {
+                console.error('Error al guardar cotización en Firebase:', error);
+                alert('Hubo un error al enviar la cotización. Intenta más tarde.');
+            }
+        });
+    </script>
+</body>
+</html>
